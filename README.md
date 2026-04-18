@@ -2,23 +2,39 @@
 
 A fully serverless URL shortener built for a tech conference scenario where speakers need branded short links for their talk resources.
 
-## The Problem
-Speakers at DevSummit share resource links during talks, but long URLs on slides are unreadable. This system lets organizers create short, memorable links that attendees can type or scan as QR codes.
+---
 
-## Architecture
+## 📌 The Problem
 
-Flow 1 — Speaker creates a short URL
+Speakers at DevSummit share resource links during talks, but long URLs on slides are unreadable. This system allows organizers to generate short, memorable links that attendees can easily type or scan via QR codes.
 
-POST /shorten → API Gateway → Lambda (createShortUrl) → DynamoDB
+---
 
-Flow 2 — Attendee scans QR code or types short URL
+## 🏗 Architecture
 
-GET /{code} → API Gateway → Lambda (redirectUrl) → DynamoDB → 301 Redirect
+This system follows a fully serverless, event-driven design with two main flows:
 
-## Architecture Diagram
-![Architecture](docs/screenshots/architecture-diagram.png)
+### Flow 1 — Create Short URL
+POST /shorten  
+→ API Gateway  
+→ Lambda (createShortUrl)  
+→ DynamoDB (store mapping)
 
-## AWS Services Used
+### Flow 2 — Redirect User
+GET /{code}  
+→ API Gateway  
+→ Lambda (redirectUrl)  
+→ DynamoDB (lookup)  
+→ 301 Redirect response
+
+---
+
+## 🧩 Architecture Diagram
+![Architecture](assets/screenshots/architecture-diagram.png)
+
+---
+
+## ☁️ AWS Services Used
 
 | Service | Purpose |
 |---|---|
@@ -27,59 +43,61 @@ GET /{code} → API Gateway → Lambda (redirectUrl) → DynamoDB → 301 Redire
 | DynamoDB | NoSQL database storing URL mappings and click counts |
 | IAM | Scoped execution role with least privilege access |
 
-## Features
-- Create short codes from long URLs
-- Instant 301 redirects with millisecond DynamoDB lookups
-- Atomic click counter per link
-- Duplicate URL detection via GSI reverse lookup
-- Least privilege IAM role scoped to one table
+---
 
-## Deployment Evidence
+## ✨ Features
 
-### DynamoDB Table
-![DynamoDB Table](docs/screenshots/dynamodb-table-created.png)
+- Create short codes from long URLs  
+- Instant 301 redirects with millisecond DynamoDB lookups  
+- Atomic click counter per link  
+- Duplicate URL detection via GSI reverse lookup  
+- Least privilege IAM role scoped to one table  
 
-### GSI Active
-![GSI Active](docs/screenshots/dynamodb-gsi-active.png)
+---
 
-### IAM Role
-![IAM Role](docs/screenshots/iam-role-created.png)
+## 📸 Screenshots
 
-### Lambda Functions Deployed
-![Lambda Create](docs/screenshots/lambda-create-deployed.png)
-![Lambda Redirect](docs/screenshots/lambda-redirect-deployed.png)
+### 🗄 DynamoDB Setup
+![DynamoDB Table](assets/screenshots/dynamodb-table-created.png)  
+![GSI Active](assets/screenshots/dynamodb-gsi-active.png)
 
-### API Gateway Routes
-![API Gateway](docs/screenshots/api-gateway-routes.png)
+### 🔐 IAM Role
+![IAM Role](assets/screenshots/iam-role-created.png)
 
-### Live Redirect Working
-![Redirect Test](docs/screenshots/test-redirect-working.png)
+### ⚙️ Lambda Functions
+![Lambda Create](assets/screenshots/lambda-create-deployed.png)  
+![Lambda Redirect](assets/screenshots/lambda-redirect-deployed.png)
 
-### DynamoDB Click Counter
-![Click Counter](docs/screenshots/dynamodb-click-counter.png)
+### 🌐 API Gateway
+![API Gateway](assets/screenshots/api-gateway-routes.png)
 
-### Duplicate Detection
-![Duplicate Detection](docs/screenshots/test-duplicate-detection.png)
+### 🔁 End-to-End Test
+![Redirect Test](assets/screenshots/test-redirect-working.png)
 
-## Key Design Decisions
+### 📊 Click Tracking
+![Click Counter](assets/screenshots/dynamodb-click-counter.png)
 
-**Why Lambda?**
-Traffic spikes are unpredictable at conferences — 5,000 attendees might scan a QR code simultaneously. Lambda auto-scales instantly with no pre-provisioned servers.
+---
 
-**Why DynamoDB?**
-Single-digit millisecond reads on partition key lookups. A redirect needs to be near-instant or the attendee experience suffers.
+## 🚀 What I Learned
 
-**Why HTTP API Gateway over REST API?**
-70% cheaper per million requests and lower latency — the right choice for a high-volume redirect use case.
+- Designing stateless serverless architectures using AWS Lambda  
+- Structuring DynamoDB for both primary access and reverse lookups (GSI)  
+- Implementing efficient redirects with minimal latency  
+- Applying least-privilege IAM policies in real-world scenarios  
+- Building production-style APIs using API Gateway  
 
-**Why a GSI?**
-DynamoDB can only query by partition key by default. The GSI on original_url lets us detect duplicates before creating a new short code.
+---
 
-**Why least privilege IAM?**
-Lambda only needs 4 DynamoDB actions on one table. Scoping the role minimizes blast radius if the function were ever compromised.
+## 📌 Future Improvements
 
-## What I'd Build Next
-- Custom domain (devsummit.io/s/abc123)
-- CloudWatch dashboard for monitoring
-- Auto-generated QR code per short link
-- Admin panel to view all links and click counts
+- Add custom domain (Route 53 + CloudFront)  
+- Implement rate limiting & abuse protection  
+- Add authentication for link creation  
+- Build an analytics dashboard for link performance  
+
+---
+
+## 🛠 Setup & Deployment (Optional)
+
+> Add your deployment steps here if you want recruiters to see reproducibility.
