@@ -43,6 +43,7 @@ GET /{code}
 → 301 Redirect response
 
 ---
+
 ## Design Decisions
 
 - DynamoDB was chosen for low-latency key-value lookups and automatic scaling
@@ -50,6 +51,8 @@ GET /{code}
 - API Gateway acts as a managed HTTP entry point for both create and redirect flows
 - 301 redirects are used for permanent, SEO-friendly URL forwarding
 - A Global Secondary Index (GSI) enables reverse lookup to prevent duplicate URL entries
+
+---
 
 ## AWS Services Used
 
