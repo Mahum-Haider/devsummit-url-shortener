@@ -19,6 +19,16 @@ This system follows a fully serverless, event-driven design with two main flows:
 
 ---
 
+## Design Tradeoffs
+
+- Chose DynamoDB over relational DB for low-latency key-value lookups
+- Used Lambda for stateless scaling and cost efficiency
+- API Gateway provides managed routing and throttling
+- 301 redirects chosen for permanent SEO-friendly links
+- GSI used to enable reverse lookup of original URLs
+
+---
+
 ### Flow 1 — Create Short URL
 POST /shorten  
 → API Gateway  
