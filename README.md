@@ -99,6 +99,8 @@ https://your-api.com/abc123
 
 You should be redirected (301) to the original URL.
 
+---
+
 ## Screenshots
 
 ### DynamoDB Setup
