@@ -62,17 +62,21 @@ GET /{code}
 ![GSI Active](assets/screenshots/dynamodb-gsi-active.png)
 
 ### ⚙️ Lambda Functions
-![Lambda Create](assets/screenshots/lambda-create-deployed.png)  
+![Lambda Create](assets/screenshots/lambda-create-deployed.png)
+![Lambda Create](assets/screenshots/lambda-create-test-success.png)
 ![Lambda Redirect](assets/screenshots/lambda-redirect-deployed.png)
 
 ### 🌐 API Gateway
 ![API Gateway](assets/screenshots/api-gateway-routes.png)
+![API Gateway](assets/screenshots/api-gateway-invoke-url.png) 
 
 ### 🔁 End-to-End Test
+![Redirect Test](assets/screenshots/test-create-short-url.png)
 ![Redirect Test](assets/screenshots/test-redirect-working.png)
 
 ### 📊 Click Tracking
-![Click Counter](assets/screenshots/dynamodb-click-counter.png)
+![Click Counter](assets/screenshots/test-browser-redirect.png) 
+![Click Counter](assets/screenshots/dynamodb-click-counter.png) 
 
 ---
 
