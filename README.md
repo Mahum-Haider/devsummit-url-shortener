@@ -4,15 +4,20 @@ A fully serverless URL shortener built for a tech conference scenario where spea
 
 ---
 
-## 📌 The Problem
+## The Problem
 
 Speakers at DevSummit share resource links during talks, but long URLs on slides are unreadable. This system allows organizers to generate short, memorable links that attendees can easily type or scan via QR codes.
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 This system follows a fully serverless, event-driven design with two main flows:
+
+## Architecture Diagram
+![Architecture](assets/screenshots/architecture-diagram.png)
+
+---
 
 ### Flow 1 — Create Short URL
 POST /shorten  
@@ -28,13 +33,15 @@ GET /{code}
 → 301 Redirect response
 
 ---
+## Design Decisions
 
-## 🧩 Architecture Diagram
-![Architecture](assets/screenshots/architecture-diagram.png)
+- DynamoDB was chosen for low-latency key-value lookups and automatic scaling
+- Lambda provides a fully serverless, event-driven compute layer with no infrastructure management
+- API Gateway acts as a managed HTTP entry point for both create and redirect flows
+- 301 redirects are used for permanent, SEO-friendly URL forwarding
+- A Global Secondary Index (GSI) enables reverse lookup to prevent duplicate URL entries
 
----
-
-## ☁️ AWS Services Used
+## AWS Services Used
 
 | Service | Purpose |
 |---|---|
@@ -45,7 +52,7 @@ GET /{code}
 
 ---
 
-## ✨ Features
+## Features
 
 - Create short codes from long URLs  
 - Instant 301 redirects with millisecond DynamoDB lookups  
@@ -55,32 +62,56 @@ GET /{code}
 
 ---
 
-## 📸 Screenshots
+## How to Test
 
-### 🗄 DynamoDB Setup
+### 1. Create a short URL
+Send a POST request to `/shorten`:
+
+POST /shorten
+{
+  "url": "https://aws.amazon.com/lambda/"
+}
+
+### 2. Get response
+You will receive a short code:
+
+{
+  "shortUrl": "https://your-api.com/abc123"
+}
+
+### 3. Test redirect
+Open the short URL in browser:
+
+https://your-api.com/abc123
+
+You should be redirected (301) to the original URL.
+
+## Screenshots
+
+### DynamoDB Setup
 ![DynamoDB Table](assets/screenshots/dynamodb-table-created.png)  
 ![GSI Active](assets/screenshots/dynamodb-gsi-active.png)
 
-### ⚙️ Lambda Functions
+### Lambda Functions
 ![Lambda Create](assets/screenshots/lambda-create-deployed.png)
 ![Lambda Create](assets/screenshots/lambda-create-test-success.png)
 ![Lambda Redirect](assets/screenshots/lambda-redirect-deployed.png)
 
-### 🌐 API Gateway
+### API Gateway
 ![API Gateway](assets/screenshots/api-gateway-routes.png)
 ![API Gateway](assets/screenshots/api-gateway-invoke-url.png) 
 
-### 🔁 End-to-End Test
+### End-to-End Test
 ![Redirect Test](assets/screenshots/test-create-short-url.png)
 ![Redirect Test](assets/screenshots/test-redirect-working.png)
 
-### 📊 Click Tracking
+### Click Tracking
 ![Click Counter](assets/screenshots/test-browser-redirect.png) 
 ![Click Counter](assets/screenshots/dynamodb-click-counter.png) 
 
 ---
 
-## 🚀 What I Learned
+## What I Learned
 
 - Designing stateless serverless architectures using AWS Lambda  
 - Structuring DynamoDB for both primary access and reverse lookups (GSI)  
@@ -90,15 +121,9 @@ GET /{code}
 
 ---
 
-## 📌 Future Improvements
+## Future Improvements
 
 - Add custom domain (Route 53 + CloudFront)  
 - Implement rate limiting & abuse protection  
 - Add authentication for link creation  
 - Build an analytics dashboard for link performance  
-
----
-
-## 🛠 Setup & Deployment (Optional)
-
-> Add your deployment steps here if you want recruiters to see reproducibility.
