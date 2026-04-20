@@ -61,9 +61,6 @@ GET /{code}
 ![DynamoDB Table](assets/screenshots/dynamodb-table-created.png)  
 ![GSI Active](assets/screenshots/dynamodb-gsi-active.png)
 
-### 🔐 IAM Role
-![IAM Role](assets/screenshots/iam-role-created.png)
-
 ### ⚙️ Lambda Functions
 ![Lambda Create](assets/screenshots/lambda-create-deployed.png)  
 ![Lambda Redirect](assets/screenshots/lambda-redirect-deployed.png)
